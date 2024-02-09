@@ -1,0 +1,4 @@
+io/*.s
+io/*.o
+.vscode
+.idea
