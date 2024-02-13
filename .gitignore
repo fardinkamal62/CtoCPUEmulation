@@ -2,3 +2,6 @@ io/*.s
 io/*.o
 .vscode
 .idea
+
+# Ignore the build directory
+build/main
