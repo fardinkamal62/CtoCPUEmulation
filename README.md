@@ -1,6 +1,6 @@
 <div align="center"><h1>CtoCPUSimulation</h1></div>
 <div align="center">Simulate how a C code runs on CPU</div>
-<div align="center" style="color: grey"><sub>Version: Beta 1.0.0</sub></div>
+<div align="center" style="color: grey"><sub>Version: Beta 1.2.0</sub></div>
 <div align="center">
     •
     <a href="https://docs.google.com/spreadsheets/d/1Gy-awnp90zUcDBTf9CqYeFb6_v5o62O8cm85PChxw18/edit?usp=sharing">Doc</a>
@@ -27,6 +27,11 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 This project is licensed under the [GNU General Public License v3.0](LICENSE).
 
 ## Changelog
-### **Beta 1.0.0**
+### Beta 1.2.0
+- Load binary instructions into memory
+- Simulate executing binary instructions on CPU
+- Show the output of the execution
+
+### Beta 1.0.0
 
 Able to convert C code to assembly code and machine code and show the output.
