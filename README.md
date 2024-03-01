@@ -3,11 +3,15 @@
 <div align="center" style="color: grey"><sub>Version: Beta 1.2.0</sub></div>
 <div align="center">
     •
-    <a href="https://docs.google.com/spreadsheets/d/1Gy-awnp90zUcDBTf9CqYeFb6_v5o62O8cm85PChxw18/edit?usp=sharing">Doc</a>
+    <a href="https://docs.google.com/document/d/1nFtFiSOII9s5k_dbEd0aYju97Wj9iX1dYfyFI1vBiF0/edit#heading=h.6ll8yxyq48ox">Documentation</a>
     </strong>
 </div>
 
 ## Description
+
+**Note** This version is modified to work with Node.JS project used in this [project](https://github.com/fardinkamal62/CtoCPUEmulationBackEnd)
+
+
 CtoCPUEmulation is a project that emulates the execution of C code. It emulates the conversion of how a C code converts into assembly code then into machine code and then runs on a CPU & what instructions does CPU executes
 
 ## Features
@@ -18,7 +22,7 @@ CtoCPUEmulation is a project that emulates the execution of C code. It emulates 
 1. Clone the repository: `git clone https://github.com/fardinkamal62/CtoCPUEmulation.git`
 2. Navigate to the project directory: `cd CtoCPUEmulation`
 3. Put your C code in `io/input.c` file. Check `io/input.c` for example.
-3. Run `gcc main.c -o build/main && build/main` to compile and run the program.
+4. Run `gcc main.c -o build/main && build/main` to compile and run the program.
 
 ## Contributing
 Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.

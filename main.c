@@ -91,16 +91,14 @@ void print_binary(unsigned char byte)
 /**
  * View the contents of the binary file in human readable format in hexadecimal
  */
-void view_binary_file()
+void view_binary_file(const char *binary_file)
 {
-    FILE *file = fopen(BINARY_FILE, "rb");
+    FILE *file = fopen(binary_file, "rb");
     if (file == NULL)
     {
         fprintf(stderr, "Error: Unable to open binary file\n");
         exit(EXIT_FAILURE);
     }
-
-    printf("\nBinary code:\n");
     fseek(file, 0, SEEK_END);
     long file_size = ftell(file);
     rewind(file);
@@ -120,7 +118,6 @@ void view_binary_file()
     {
         print_binary(buffer[i]);
     }
-    printf("\n");
 
     free(buffer);
 }
@@ -128,16 +125,15 @@ void view_binary_file()
 /**
  * View the contents of the preprocessed file
  */
-void view_preprocessed_file()
+void view_preprocessed_file(const char *assembly_file)
 {
-    FILE *file = fopen(ASSEMBLY_FILE, "r");
+    FILE *file = fopen(assembly_file, "r");
     if (file == NULL)
     {
         fprintf(stderr, "Error: Unable to open assembly file\n");
         exit(EXIT_FAILURE);
     }
 
-    printf("\nPreprocessed code:\n");
     char line[MAX_LINE_LENGTH];
     while (fgets(line, sizeof(line), file) != NULL)
     {
@@ -145,22 +141,20 @@ void view_preprocessed_file()
     }
 
     fclose(file);
-    printf("\n\n");
 }
 
 /**
  * View the contents of the assembly file
  */
-void view_assembly_file()
+void view_assembly_file(const char *assembly_file)
 {
-    FILE *file = fopen(ASSEMBLY_FILE, "r");
+    FILE *file = fopen(assembly_file, "r");
     if (file == NULL)
     {
         fprintf(stderr, "Error: Unable to open assembly file\n");
         exit(EXIT_FAILURE);
     }
 
-    printf("\nAssembly code:\n");
     char line[MAX_LINE_LENGTH];
     while (fgets(line, sizeof(line), file) != NULL)
     {
@@ -168,19 +162,16 @@ void view_assembly_file()
     }
 
     fclose(file);
-    printf("\n\n");
 }
 /**
  * Generate the binary machine code from the assembly code
  * The assembler (e.g., GNU as) translates the assembly code into binary machine code
  */
-void *generate_binary_code()
+void *generate_binary_code(const char *binary_output_file, const char *assembly_file)
 {
-    printf("\nGenerating binary code...\n");
-
     // Prepare the command to invoke the assembler (e.g., GNU as)
     char command[MAX_LINE_LENGTH];
-    snprintf(command, sizeof(command), "as -o %s %s", BINARY_FILE, ASSEMBLY_FILE);
+    snprintf(command, sizeof(command), "as -o %s %s", binary_output_file, assembly_file);
 
     // Execute the assembler and check for errors
     int result = system(command);
@@ -191,10 +182,10 @@ void *generate_binary_code()
     }
 
     // Read the binary machine code from the output file
-    FILE *binary_file = fopen(BINARY_FILE, "rb");
+    FILE *binary_file = fopen(binary_output_file, "rb");
     if (binary_file == NULL)
     {
-        fprintf(stderr, "Error: Unable to open binary file %s\n", BINARY_FILE);
+        fprintf(stderr, "Error: Unable to open binary file %s\n", binary_output_file);
         exit(EXIT_FAILURE);
     }
     fseek(binary_file, 0, SEEK_END);
@@ -211,7 +202,6 @@ void *generate_binary_code()
     fclose(binary_file);
 
     free(binary_code);
-    printf("\nBinary code generated!\n");
 }
 
 /**
@@ -237,7 +227,6 @@ void preprocess(const char *input_file_path, const char *output_file_path)
     }
     char line[MAX_LINE_LENGTH];
 
-    printf("\nPreprocessing...\n");
     while (fgets(line, sizeof(line), input_file) != NULL)
     {
         // Check if the line starts with #include or #define
@@ -271,7 +260,6 @@ void preprocess(const char *input_file_path, const char *output_file_path)
             fprintf(output_file, "%s", line);
         }
     }
-    printf("\nPreprocessing done!\n");
     fclose(input_file);
     fclose(output_file);
 }
@@ -281,13 +269,11 @@ void preprocess(const char *input_file_path, const char *output_file_path)
  * The C compiler (e.g., GCC) translates the preprocessed C code into assembly code
  * @param input_filename The name of the input file
  */
-void *generate_assembly(const char *input_filename)
+void *generate_assembly(const char *input_filename, const char *assembly_output_file)
 {
-    printf("\nGenerating assembly code...\n");
-
     // Prepare the command to invoke GCC
     char command[MAX_LINE_LENGTH];
-    snprintf(command, sizeof(command), "gcc -S -o %s %s", ASSEMBLY_FILE, input_filename);
+    snprintf(command, sizeof(command), "gcc -S -o %s %s", assembly_output_file, input_filename);
 
     // Execute GCC
     if (system(command) != 0)
@@ -297,10 +283,10 @@ void *generate_assembly(const char *input_filename)
     }
 
     // Open the file containing the generated assembly code
-    FILE *assembly_file = fopen(ASSEMBLY_FILE, "r");
+    FILE *assembly_file = fopen(assembly_output_file, "r");
     if (assembly_file == NULL)
     {
-        fprintf(stderr, "Error: Unable to open assembly file %s\n", ASSEMBLY_FILE);
+        fprintf(stderr, "Error: Unable to open assembly file %s\n", assembly_output_file);
         return NULL;
     }
 
@@ -327,35 +313,42 @@ void *generate_assembly(const char *input_filename)
     // Close the assembly file
     fclose(assembly_file);
 
-    printf("Assembly code generated successfully!\n");
     return assembly_code;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    printf("%s %s\n", NAME, VERSION);
+    int arguments = 3;
+    int i;
+    char *input_path = argv[1];
+    char *assembly_path = argv[2];
+    char *binary_path = argv[3];
 
-    preprocess(INPUT_FILE, ASSEMBLY_FILE);
-    view_preprocessed_file();
+    preprocess(input_path, assembly_path);
+    view_preprocessed_file(assembly_path);
+    printf("##OUTPUT##\n");
 
-    generate_assembly(INPUT_FILE);
-    view_assembly_file();
+    generate_assembly(input_path, assembly_path);
+    view_assembly_file(assembly_path);
+    printf("##OUTPUT##\n");
 
-    generate_binary_code();
-    view_binary_file();
+    generate_binary_code(binary_path, assembly_path);
+    view_binary_file(binary_path);
+    printf("##OUTPUT##\n");
 
     CPU cpu;
     cpu.pc = 0;
     cpu.accumulator = 0;
-    load_program(&cpu, BINARY_FILE);
+    load_program(&cpu, binary_path);
 
     // Emulate execution loop
-    while (cpu.pc < MEMORY_SIZE)
-    {
-        execute_instruction(&cpu);
-    }
+    // while (cpu.pc < MEMORY_SIZE)
+    // {
+    //     execute_instruction(&cpu);
+    // }
 
     printf("Result in accumulator: %d\n", cpu.accumulator);
+    printf("##OUTPUT##");
 
     return EXIT_SUCCESS;
 }
