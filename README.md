@@ -3,7 +3,7 @@
 <div align="center" style="color: grey"><sub>Version: Beta 1.2.0</sub></div>
 <div align="center">
     •
-    <a href="https://docs.google.com/document/d/1nFtFiSOII9s5k_dbEd0aYju97Wj9iX1dYfyFI1vBiF0/edit#heading=h.6ll8yxyq48ox">Documentation</a>
+    <a href="https://docs.google.com/document/d/1nFtFiSOII9s5k_dbEd0aYju97Wj9iX1dYfyFI1vBiF0/edit#heading=h.6ll8yxyq48ox" target='_blank'>Documentation</a>
     </strong>
 </div>
 
