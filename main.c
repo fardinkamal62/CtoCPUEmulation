@@ -45,8 +45,8 @@ void load_program(CPU *cpu, const char *filename)
 void execute_instruction(CPU *cpu)
 {
     int instruction = cpu->memory[cpu->pc];
-    int opcode = instruction >> 24;       // Extract opcode (first 8 bits)
-    int operand = instruction & 0xFFFFFF; // Extract operand (last 24 bits)
+    int opcode = (instruction >> 24) & 0xFF; // Extract opcode (first 8 bits)
+    int operand = instruction & 0xFFFFFF;    // Extract operand (last 24 bits)
 
     switch (opcode)
     {
@@ -65,9 +65,6 @@ void execute_instruction(CPU *cpu)
     case 3: // Halt instruction
         printf("Halted execution\n");
         cpu->pc = MEMORY_SIZE; // Terminate execution
-        break;
-    default:
-        printf("Unknown opcode %d\n", opcode);
         break;
     }
 
@@ -324,9 +321,9 @@ int main(int argc, char *argv[])
     char *assembly_path = argv[2];
     char *binary_path = argv[3];
 
-    preprocess(input_path, assembly_path);
-    view_preprocessed_file(assembly_path);
-    printf("##OUTPUT##\n");
+    // preprocess(input_path, assembly_path);
+    // view_preprocessed_file(assembly_path);
+    // printf("##OUTPUT##\n");
 
     generate_assembly(input_path, assembly_path);
     view_assembly_file(assembly_path);
@@ -342,10 +339,10 @@ int main(int argc, char *argv[])
     load_program(&cpu, binary_path);
 
     // Emulate execution loop
-    // while (cpu.pc < MEMORY_SIZE)
-    // {
-    //     execute_instruction(&cpu);
-    // }
+    while (cpu.pc < MEMORY_SIZE)
+    {
+        execute_instruction(&cpu);
+    }
 
     printf("Result in accumulator: %d\n", cpu.accumulator);
     printf("##OUTPUT##");
